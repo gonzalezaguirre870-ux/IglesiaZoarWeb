@@ -1,64 +1,308 @@
-body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
-.header-iglesia { text-align: center; margin-bottom: 25px; color: #1a365d; }
-.header-iglesia h1 { margin: 0; font-size: 28px; }
-.header-iglesia p { margin: 5px 0 0 0; color: #4a5568; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+.header-iglesia {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1a365d;
+}
+
+.header-iglesia h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.header-iglesia p {
+    margin: 5px 0 0 0;
+    color: #4a5568;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
 /* Sistema de Pestañas (Tabs) */
-.tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
-.tab-btn { padding: 12px 20px; background: #e2e8f0; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: all 0.2s; color: #4a5568; }
-.tab-btn.active { background: #2b6cb0; color: white; }
-.tab-content { display: none; max-width: 800px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.tab-content.active { display: block; }
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 12px 20px;
+    background: #e2e8f0;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #4a5568;
+}
+
+.tab-btn.active {
+    background: #2b6cb0;
+    color: white;
+}
+
+.tab-content {
+    display: none;
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tab-content.active {
+    display: block;
+}
 
 /* Formularios y Tablas */
-.form-group { margin-bottom: 15px; }
-label { display: block; font-weight: bold; margin-bottom: 5px; color: #2d3748; }
-input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 5px; box-sizing: border-box; font-size: 15px; }
-button.btn-submit { width: 100%; background-color: #2b6cb0; color: white; padding: 12px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-button.btn-submit:hover { background-color: #2c5282; }
-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
-th { background-color: #edf2f7; color: #4a5568; }
-.nota-ayuda { color: #718096; font-size: 14px; margin-bottom: 15px; }
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2d3748;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+button.btn-submit {
+    width: 100%;
+    background-color: #2b6cb0;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button.btn-submit:hover {
+    background-color: #2c5282;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background-color: #edf2f7;
+    color: #4a5568;
+}
+
+.nota-ayuda {
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
 
 /* Badges decorativas */
-.badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-.badge-ingreso { background-color: #c6f6d5; color: #22543d; }
-.badge-egreso { background-color: #fed7d7; color: #742a2a; }
-.badge-propiedad { background-color: #bee3f8; color: #2b6cb0; }
-.badge-catecumeno { background-color: #feebc8; color: #b7791f; }
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge-ingreso {
+    background-color: #c6f6d5;
+    color: #22543d;
+}
+
+.badge-egreso {
+    background-color: #fed7d7;
+    color: #742a2a;
+}
+
+.badge-propiedad {
+    background-color: #bee3f8;
+    color: #2b6cb0;
+}
+
+.badge-catecumeno {
+    background-color: #feebc8;
+    color: #b7791f;
+}
 
 /* --- DISEÑO RESPONSIVO (Celulares y Tablets) --- */
 @media (max-width: 768px) {
-    body { padding: 10px; }
-    .header-iglesia h1 { font-size: 24px; }
-    .tabs { gap: 5px; width: 100%; }
-    .tab-btn { flex: 1 1 45%; padding: 10px; font-size: 13px; text-align: center; }
-    .tab-content { padding: 15px; }
-    
-    table, thead, tbody, th, td, tr { display: block; }
-    thead tr { position: absolute; top: -9999px; left: -9999px; }
-    tr { border: 1px solid #cbd5e0; border-radius: 8px; margin-bottom: 12px; padding: 8px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    td { border: none; border-bottom: 1px dashed #e2e8f0; position: relative; padding-left: 45%; text-align: right; font-size: 14px; }
-    td:last-child { border-bottom: none; }
-    td:before { position: absolute; top: 12px; left: 12px; width: 40%; text-align: left; font-weight: bold; color: #4a5568; white-space: nowrap; }
-    
-    #membresia td:nth-of-type(1):before { content: "Código:"; }
-    #membresia td:nth-of-type(2):before { content: "Nombre:"; }
-    #membresia td:nth-of-type(3):before { content: "Tipo:"; }
-    #membresia td:nth-of-type(4):before { content: "Cargo:"; }
+    body {
+        padding: 10px;
+    }
 
-    #eventos td:nth-of-type(1):before { content: "Fecha:"; }
-    #eventos td:nth-of-type(2):before { content: "Culto:"; }
-    #eventos td:nth-of-type(3):before { content: "Detalle:"; }
+    .header-iglesia h1 {
+        font-size: 24px;
+    }
 
-    #finanzas td:nth-of-type(1):before { content: "Fecha:"; }
-    #finanzas td:nth-of-type(2):before { content: "Tipo:"; }
-    #finanzas td:nth-of-type(3):before { content: "Categoría:"; }
-    #finanzas td:nth-of-type(4):before { content: "Sociedad:"; }
-    #finanzas td:nth-of-type(5):before { content: "Monto:"; }
+    .tabs {
+        gap: 5px;
+        width: 100%;
+    }
 
-    #santacena td:nth-of-type(1):before { content: "Código:"; }
-    #santacena td:nth-of-type(2):before { content: "Nombre:"; }
-    #santacena td:nth-of-type(3):before { content: "Tomó Cena:"; }
+    .tab-btn {
+        flex: 1 1 45%;
+        padding: 10px;
+        font-size: 13px;
+        text-align: center;
+    }
+
+    .tab-content {
+        padding: 15px;
+    }
+
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        border: 1px solid #cbd5e0;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        padding: 8px;
+        background: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    td {
+        border: none;
+        border-bottom: 1px dashed #e2e8f0;
+        position: relative;
+        padding-left: 45%;
+        text-align: right;
+        font-size: 14px;
+    }
+
+    td:last-child {
+        border-bottom: none;
+    }
+
+    td:before {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 40%;
+        text-align: left;
+        font-weight: bold;
+        color: #4a5568;
+        white-space: nowrap;
+    }
+
+    #membresia td:nth-of-type(1):before {
+        content: "Código:";
+    }
+
+    #membresia td:nth-of-type(2):before {
+        content: "Nombre:";
+    }
+
+    #membresia td:nth-of-type(3):before {
+        content: "Tipo:";
+    }
+
+    #membresia td:nth-of-type(4):before {
+        content: "Cargo:";
+    }
+
+    #eventos td:nth-of-type(1):before {
+        content: "Fecha:";
+    }
+
+    #eventos td:nth-of-type(2):before {
+        content: "Culto:";
+    }
+
+    #eventos td:nth-of-type(3):before {
+        content: "Detalle:";
+    }
+
+    #finanzas td:nth-of-type(1):before {
+        content: "Fecha:";
+    }
+
+    #finanzas td:nth-of-type(2):before {
+        content: "Tipo:";
+    }
+
+    #finanzas td:nth-of-type(3):before {
+        content: "Categoría:";
+    }
+
+    #finanzas td:nth-of-type(4):before {
+        content: "Sociedad:";
+    }
+
+    #finanzas td:nth-of-type(5):before {
+        content: "Monto:";
+    }
+
+    #santacena td:nth-of-type(1):before {
+        content: "Código:";
+    }
+
+    #santacena td:nth-of-type(2):before {
+        content: "Nombre:";
+    }
+
+    #santacena td:nth-of-type(3):before {
+        content: "Tomó Cena:";
+    }
+}
+
+.login-container {
+    max-width: 400px;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 50px auto;
+}
+
+.login-container h3 {
+    text-align: center;
+    color: #1a365d;
+    margin-top: 0;
+    margin-bottom: 20px;
 }
