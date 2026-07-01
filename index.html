@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iglesia Zoar Asambleas De Dios</title>
+    <!-- Enlace al archivo de estilos separado -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="header-iglesia">
+    <h1>Iglesia Zoar</h1>
+    <p>Asambleas De Dios</p>
+</div>
+
+<!-- MENÚ DE NAVEGACIÓN -->
+<div class="tabs">
+    <button class="tab-btn active" onclick="cambiarPestaña('membresia')">Membresía</button>
+    <button class="tab-btn" onclick="cambiarPestaña('eventos')">Eventos Semanales</button>
+    <button class="tab-btn" onclick="cambiarPestaña('privilegios')">Rotación de Privilegios</button>
+    <button class="tab-btn" onclick="cambiarPestaña('finanzas')">Finanzas</button>
+    <button class="tab-btn" onclick="cambiarPestaña('santacena')">Santa Cena</button>
+</div>
+
+<!-- 1. PESTAÑA: MEMBRESÍA -->
+<div id="membresia" class="tab-content active">
+    <h3>Registro de Hermanos</h3>
+    <form id="formMiembro" onsubmit="guardarMiembro(event)">
+        <div class="form-group"><label>Nombre Completo:</label><input type="text" id="m_nombre" required></div>
+        <div class="form-group"><label>Teléfono (Opcional):</label><input type="tel" id="m_telefono"></div>
+        <div class="form-group">
+            <label>Estatus:</label>
+            <select id="m_tipo"><option value="Propiedad">En Propiedad</option><option value="Catecumeno">Catecúmeno</option></select>
+        </div>
+        <div class="form-group">
+            <label>¿Tiene algún cargo actual?</label>
+            <select id="m_tieneCargo" onchange="evaluarCargoForm()"><option value="false">Ninguno</option><option value="true">Sí</option></select>
+        </div>
+        <div class="form-group" id="c_det" style="display:none;"><label>Escriba el cargo:</label><input type="text" id="m_detalle"></div>
+        <button type="submit" class="btn-submit">Registrar Hermano</button>
+    </form>
+    <table>
+        <thead><tr><th>Código</th><th>Nombre</th><th>Tipo</th><th>Cargo</th></tr></thead>
+        <tbody id="tablaMiembros"></tbody>
+    </table>
+</div>
+
+<!-- 2. PESTAÑA: EVENTOS -->
+<div id="eventos" class="tab-content">
+    <h3>Programación de Eventos Semanales</h3>
+    <form id="formEvento" onsubmit="guardarEvento(event)">
+        <div class="form-group">
+            <label>Culto / Actividad:</label>
+            <select id="e_culto">
+                <option value="Lunes_Campos_Blancos_Cercano">Lunes: Campos Blancos Sector 1</option>
+                <option value="Lunes_Campos_Blancos_Retirado">Lunes: Campos Blancos Sector 2</option>
+                <option value="Martes_Femenil">Martes: Concilio Misionero Femenil</option>
+                <option value="Miercoles_Misioneritas">Miércoles: Misioneritas</option>
+                <option value="Jueves_Varones">Jueves: Fraternidad de Varones</option>
+                <option value="Viernes_Exploradores">Viernes: Exploradores del Rey</option>
+                <option value="Sabado_Embajadores">Sábado: Embajadores de Cristo</option>
+                <option value="Domingo_General">Domingo: Culto General e Infantil</option>
+            </select>
+        </div>
+        <div class="form-group"><label>Fecha:</label><input type="date" id="e_fecha" required></div>
+        <div class="form-group"><label>Detalles / Liturgia / Avisos:</label><textarea id="e_desc" rows="3" required></textarea></div>
+        <button type="submit" class="btn-submit">Publicar Evento</button>
+    </form>
+    <table>
+        <thead><tr><th>Fecha</th><th>Culto</th><th>Descripción</th></tr></thead>
+        <tbody id="tablaEventos"></tbody>
+    </table>
+</div>
+
+<!-- 3. PESTAÑA: PRIVILEGIOS -->
+<div id="privilegios" class="tab-content">
+    <h3>Asignación y Rotación de Privilegios</h3>
+    <p class="nota-ayuda">* El sistema sugiere arriba a los hermanos con más tiempo sin privilegios asignados.</p>
+    <form id="formPrivilegio" onsubmit="guardarPrivilegio(event)">
+        <div class="form-group"><label>Seleccionar Hermano (Sugeridos arriba):</label><select id="p_miembro" required></select></div>
+        <div class="form-group">
+            <label>Culto de Asignación:</label>
+            <select id="p_culto">
+                <option value="Martes_Femenil">Martes Femenil</option>
+                <option value="Jueves_Varones">Jueves Varones</option>
+                <option value="Domingo_General">Domingo General</option>
+            </select>
+        </div>
+        <div class="form-group"><label>Fecha:</label><input type="date" id="p_fecha" required></div>
+        <div class="form-group"><label>Privilegio / Función:</label><input type="text" id="p_desc" placeholder="Ej: Dirección, Predicación, Altar" required></div>
+        <button type="submit" class="btn-submit">Asignar Privilegio</button>
+    </form>
+</div>
+
+<!-- 4. PESTAÑA: FINANZAS -->
+<div id="finanzas" class="tab-content">
+    <h3>Administración Financiera</h3>
+    <form id="formFinanzas" onsubmit="guardarFinanza(event)">
+        <div class="form-group"><label>Tipo de Movimiento:</label><select id="f_tipo"><option value="Ingreso">Ingreso (+)</option><option value="Egreso">Egreso (-)</option></select></div>
+        <div class="form-group"><label>Categoría:</label><input type="text" id="f_cat" placeholder="Ej: Diezmo, Ofrenda Pro-Templo, Pago de Luz" required></div>
+        <div class="form-group"><label>Sociedad / Fondo:</label><select id="f_soc"><option value="General">Fondo General</option><option value="Varones">Soc. Varones</option><option value="Femenil">Soc. Femenil</option></select></div>
+        <div class="form-group"><label>Monto ($):</label><input type="number" step="0.01" id="f_monto" required></div>
+        <div class="form-group"><label>Fecha:</label><input type="date" id="f_fecha" required></div>
+        <div class="form-group"><label>Descripción Adicional:</label><input type="text" id="f_desc"></div>
+        <button type="submit" class="btn-submit">Registrar Movimiento</button>
+    </form>
+    <table>
+        <thead><tr><th>Fecha</th><th>Tipo</th><th>Categoría</th><th>Sociedad</th><th>Monto</th></tr></thead>
+        <tbody id="tablaFinanzas"></tbody>
+    </table>
+</div>
+
+<!-- 5. PESTAÑA: SANTA CENA -->
+<div id="santacena" class="tab-content">
+    <h3>Control de Asistencia a Santa Cena</h3>
+    <p class="nota-ayuda">* Registro exclusivo para los miembros "En Propiedad" (Primer domingo del mes).</p>
+    <div class="form-group"><label>Fecha del Domingo de Comunión:</label><input type="date" id="sc_fecha" required></div>
+    <table>
+        <thead><tr><th>Código</th><th>Nombre Completo</th><th>Tomó Comunión</th></tr></thead>
+        <tbody id="tablaSantaCena"></tbody>
+    </table>
+    <button type="button" class="btn-submit" onclick="guardarSantaCena()">Guardar Registro del Mes</button>
+</div>
+
+<!-- Enlace al archivo de JavaScript separado -->
+<script src="logica.js"></script>
+</body>
+</html>
