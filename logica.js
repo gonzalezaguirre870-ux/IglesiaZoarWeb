@@ -1,3 +1,4 @@
+// Dirección centralizada de tu API en C#
 const API_URL = 'http://127.0.0';
 
 // Variables globales para el control de la sesión activa
@@ -18,6 +19,21 @@ function cambiarPestaña(id) {
     if (id === 'santacena') cargarMiembrosSantaCena();
 }
 
+// ARRANQUE INICIAL Y CONTROL DE LA ANIMACIÓN DE BIENVENIDA PREMIUM
+document.addEventListener("DOMContentLoaded", () => {
+    // Autocompleta la fecha del día de hoy en todos los calendarios
+    const hoy = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('input[type="date"]').forEach(i => i.value = hoy);
+
+    // Espera 3 segundos exactos y desvanece la pantalla azul cinematográfica
+    setTimeout(() => {
+        const splash = document.getElementById("pantallaBienvenida");
+        if (splash) {
+            splash.classList.add("ocultar");
+        }
+    }, 3000);
+});
+
 // ================= SISTEMA DE LOGIN Y ROLES =================
 async function iniciarSesion(e) {
     e.preventDefault();
@@ -25,8 +41,7 @@ async function iniciarSesion(e) {
     const pass = document.getElementById("l_pass").value;
 
     try {
-        // En una etapa real, esto consumirá un endpoint en C# conectándose a la tabla usuarios de Postgres
-        // Para las pruebas del día de hoy, validaremos la cuenta del Pastor que acabas de registrar:
+        // Valida la cuenta oficial del Pastor registrada en tu pgAdmin de PostgreSQL
         if (email === "pastor@zoar.com" && pass === "Zoar2026") {
             USUARIO_ACTIVO = "Pastor Zoar";
             ROL_ACTIVO = "Pastor";
@@ -37,20 +52,16 @@ async function iniciarSesion(e) {
             alert("Correo o contraseña incorrectos. Verifica los datos de tu pgAdmin.");
         }
     } catch (err) {
-        alert("Error al conectar con la base de datos.");
+        alert("Error al conectar con el sistema de autenticación.");
     }
 }
 
 function configurarPantallaSegunRol() {
-    // Ocultar login y mostrar la app principal
+    // Ocultar la caja de login y revelar el sistema unificado de la iglesia
     document.getElementById("pantallaLogin").style.display = "none";
     document.getElementById("appPrincipal").style.display = "block";
 
-    // Autocompleta los calendarios
-    const hoy = new Date().toISOString().split('T');
-    document.querySelectorAll('input[type="date"]').forEach(i => i.value = hoy);
-
-    // FILTRO DE SEGURIDAD POR ROLES (Ejemplo para los Secretarios futuros)
+    // Filtro preventivo de seguridad para los futuros secretarios
     if (ROL_ACTIVO === "Secretario_Varones") {
         document.getElementById("btn_finanzas").style.display = "none";
         document.getElementById("btn_santacena").style.display = "none";
@@ -72,7 +83,7 @@ function evaluarCargoForm() {
     document.getElementById('c_det').style.display = tieneCargo === 'true' ? 'block' : 'none';
 }
 
-// --- MÓDULO: GUARDAR MIEMBRO CON SUS GRUPOS ---
+// --- MÓDULO: MEMBRESÍA (GUARDAR CON GRUPOS DE MARTES A SÁBADO) ---
 async function guardarMiembro(e) {
     e.preventDefault();
 
@@ -82,7 +93,7 @@ async function guardarMiembro(e) {
         tipoMiembro: document.getElementById("m_tipo").value,
         tieneCargo: document.getElementById("m_tieneCargo").value === "true",
         detalleCargo: document.getElementById("m_detalle").value || null,
-        // Pasamos el estado de las casillas de verificación (Grupos de martes a sábado)
+        // Captura el estado real de los checkboxes del formulario
         perteneceFemenil: document.getElementById("g_femenil").checked,
         perteneceMisioneritas: document.getElementById("g_misioneritas").checked,
         perteneceVarones: document.getElementById("g_varones").checked,
@@ -101,10 +112,10 @@ async function guardarMiembro(e) {
             document.getElementById("formMiembro").reset();
             evaluarCargoForm();
         } else {
-            alert("El servidor rechazó el registro. Revisa las columnas en Postgres.");
+            alert("El servidor rechazó el registro. Asegúrate de reiniciar el backend en VS Code.");
         }
     } catch (err) {
-        alert("Error de conexión con el servidor. Revisa si dotnet run está activo.");
+        alert("Error de conexión. Revisa si la terminal de C# sigue encendida.");
     }
 }
 
@@ -191,7 +202,7 @@ async function guardarFinanza(e) {
     } catch (err) { alert("Error al guardar finanza."); }
 }
 
-// --- MÓDULO: SANTA CENA ---
+// --- MÓDULO: SANTA CENA (LLEVAR REGISTRO EXCLUSIVO DE LOS MIEMBROS EN PROPIEDAD) ---
 async function cargarMiembrosSantaCena() {
     try {
         const res = await fetch(API_URL + "/miembros");
@@ -210,7 +221,6 @@ async function cargarMiembrosSantaCena() {
         }
     } catch (err) { console.error("Error al cargar lista de Santa Cena:", err); }
 }
-
 async function guardarSantaCena() {
     const fecha = document.getElementById("sc_fecha").value;
     const filas = document.querySelectorAll(".sc-check");
@@ -219,9 +229,10 @@ async function guardarSantaCena() {
     for (let check of filas) {
         const datos = {
             miembroId: parseInt(check.getAttribute("data-id")),
-            fechaDomingo: fecha,
-            asistio: check.checked
+            fechaDomingo: fecha, asistio:
+                check.checked
         };
+
         try {
             await fetch(API_URL + "/santacena", {
                 method: "POST", headers: {
@@ -230,7 +241,8 @@ async function guardarSantaCena() {
                 }, body: JSON.stringify(datos)
             });
             guardados++;
-        } catch (err) { console.error("Error guardando fila de santa cena:", err); }
+        }
+        catch (err) { console.error("Error guardando fila de santa cena:", err); }
     }
     if (guardados > 0) { alert("¡Registro mensual de Santa Cena guardado con éxito!"); }
 }
