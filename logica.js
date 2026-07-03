@@ -1,5 +1,4 @@
-// Dirección centralizada de tu API en C#
-const API_URL = 'http://127.0.0';
+const API_URL = 'https://github.dev';
 
 // Variables globales para el control de la sesión activa
 let USUARIO_ACTIVO = null;
