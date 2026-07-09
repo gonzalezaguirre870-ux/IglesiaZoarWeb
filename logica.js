@@ -1,3 +1,4 @@
+// Dirección centralizada de tu API en la nube de Render
 const API_URL = 'https://onrender.com';
 
 // Variables globales para el control de la sesión activa
@@ -18,53 +19,58 @@ function cambiarPestaña(id) {
     if (id === 'santacena') cargarMiembrosSantaCena();
 }
 
-// ARRANQUE INICIAL Y CONTROL DE LA ANIMACIÓN DE BIENVENIDA PREMIUM
+// ARRANQUE INICIAL Y CONTROL DE LA ANIMACIÓN DE BIENVENIDA
 document.addEventListener("DOMContentLoaded", () => {
-    // Autocompleta la fecha del día de hoy en todos los calendarios
-    const hoy = new Date().toISOString().split('T')[0];
+    const hoy = new Date().toISOString().split('T');
     document.querySelectorAll('input[type="date"]').forEach(i => i.value = hoy);
 
-    // Espera 3 segundos exactos y desvanece la pantalla azul cinematográfica
     setTimeout(() => {
         const splash = document.getElementById("pantallaBienvenida");
-        if (splash) {
-            splash.classList.add("ocultar");
-        }
+        if (splash) { splash.classList.add("ocultar"); }
     }, 3000);
 });
 
-// ================= SISTEMA DE LOGIN Y ROLES =================
+// ================= SISTEMA DE LOGIN Y ROLES SEGUROS =================
 async function iniciarSesion(e) {
     e.preventDefault();
     const email = document.getElementById("l_email").value;
     const pass = document.getElementById("l_pass").value;
 
-    try {
-        // Valida la cuenta oficial del Pastor registrada en tu pgAdmin de PostgreSQL
-        if (email === "pastor@zoar.com" && pass === "Zoar2026") {
-            USUARIO_ACTIVO = "Pastor Zoar";
-            ROL_ACTIVO = "Pastor";
+    let usuarioEncontrado = false;
 
-            alert("¡Bienvenido Pastor! Acceso total concedido.");
-            configurarPantallaSegunRol();
-        } else {
-            alert("Correo o contraseña incorrectos. Verifica los datos de tu pgAdmin.");
-        }
-    } catch (err) {
-        alert("Error al conectar con el sistema de autenticación.");
+    // Validación de las cuentas creadas en el pgAdmin de la nube
+    if (email === "admin@zoar.com" && pass === "AdminZoar2026") { USUARIO_ACTIVO = "Admin"; ROL_ACTIVO = "Administrador"; usuarioEncontrado = true; }
+    else if (email === "pastor@zoar.com" && pass === "Zoar2026") { USUARIO_ACTIVO = "Pastor Zoar"; ROL_ACTIVO = "Pastor"; usuarioEncontrado = true; }
+    else if (email === "femenil@zoar.com" && pass === "MartesZoar") { USUARIO_ACTIVO = "Sec. Femenil"; ROL_ACTIVO = "Secretario_Femenil"; usuarioEncontrado = true; }
+    else if (email === "misioneritas@zoar.com" && pass === "MiercolesZoar") { USUARIO_ACTIVO = "Sec. Misioneritas"; ROL_ACTIVO = "Secretario_Misioneritas"; usuarioEncontrado = true; }
+    else if (email === "varones@zoar.com" && pass === "JuevesZoar") { USUARIO_ACTIVO = "Sec. Varones"; ROL_ACTIVO = "Secretario_Varones"; usuarioEncontrado = true; }
+    else if (email === "exploradores@zoar.com" && pass === "ViernesZoar") { USUARIO_ACTIVO = "Sec. Exploradores"; ROL_ACTIVO = "Secretario_Exploradores"; usuarioEncontrado = true; }
+    else if (email === "embajadores@zoar.com" && pass === "SabadoZoar") { USUARIO_ACTIVO = "Sec. Embajadores"; ROL_ACTIVO = "Secretario_Embajadores"; usuarioEncontrado = true; }
+
+    if (usuarioEncontrado) {
+        alert("¡Bienvenido! Acceso concedido como: " + ROL_ACTIVO.replace(/_/g, ' '));
+        configurarPantallaSegunRol();
+    } else {
+        alert("Correo o contraseña incorrectos. Revisa las credenciales de la iglesia.");
     }
 }
 
 function configurarPantallaSegunRol() {
-    // Ocultar la caja de login y revelar el sistema unificado de la iglesia
     document.getElementById("pantallaLogin").style.display = "none";
     document.getElementById("appPrincipal").style.display = "block";
 
-    // Filtro preventivo de seguridad para los futuros secretarios
-    if (ROL_ACTIVO === "Secretario_Varones") {
+    // Habilitar todos los botones para resetear bloqueos de sesiones anteriores
+    document.querySelectorAll(".tab-btn").forEach(b => b.style.display = "inline-block");
+
+    // REGLA DE ORO DE ACCESOS SOLICITADA:
+    if (ROL_ACTIVO.startsWith("Secretario_")) {
+        // Los secretarios NO pueden ver finanzas ni santa cena
         document.getElementById("btn_finanzas").style.display = "none";
         document.getElementById("btn_santacena").style.display = "none";
-        document.getElementById("btn_privilegios").style.display = "none";
+        // Pasan directo a registro y control de eventos
+        cambiarPestaña('membresia');
+    } else if (ROL_ACTIVO === "Pastor" || ROL_ACTIVO === "Administrador") {
+        // El Pastor y usted como Administrador tienen visibilidad total absoluta
         cambiarPestaña('membresia');
     }
 }
@@ -82,17 +88,15 @@ function evaluarCargoForm() {
     document.getElementById('c_det').style.display = tieneCargo === 'true' ? 'block' : 'none';
 }
 
-// --- MÓDULO: MEMBRESÍA (GUARDAR CON GRUPOS DE MARTES A SÁBADO) ---
+// --- MÓDULO: REGISTRAR MIEMBROS POR GRUPO ---
 async function guardarMiembro(e) {
     e.preventDefault();
-
     const datos = {
         nombreCompleto: document.getElementById("m_nombre").value,
         telefono: document.getElementById("m_telefono").value || null,
         tipoMiembro: document.getElementById("m_tipo").value,
         tieneCargo: document.getElementById("m_tieneCargo").value === "true",
         detalleCargo: document.getElementById("m_detalle").value || null,
-        // Captura el estado real de los checkboxes del formulario
         perteneceFemenil: document.getElementById("g_femenil").checked,
         perteneceMisioneritas: document.getElementById("g_misioneritas").checked,
         perteneceVarones: document.getElementById("g_varones").checked,
@@ -110,12 +114,8 @@ async function guardarMiembro(e) {
             alert("¡Hermano registrado con éxito en la Iglesia Zoar!");
             document.getElementById("formMiembro").reset();
             evaluarCargoForm();
-        } else {
-            alert("El servidor rechazó el registro. Asegúrate de reiniciar el backend en VS Code.");
-        }
-    } catch (err) {
-        alert("Error de conexión. Revisa si la terminal de C# sigue encendida.");
-    }
+        } else { alert("Error en el formato de datos de internet."); }
+    } catch (err) { alert("Error de conexión con el servidor en la nube."); }
 }
 
 // --- MÓDULO: EVENTOS ---
@@ -126,15 +126,11 @@ async function cargarEventos() {
             const lista = await res.json();
             let html = "";
             lista.forEach(e => {
-                html += "<tr>" +
-                    "<td>" + e.fecha + "</td>" +
-                    "<td><b>" + e.culto.replace(/_/g, ' ') + "</b></td>" +
-                    "<td>" + e.descripcion + "</td>" +
-                    "</tr>";
+                html += "<tr><td>" + e.fecha + "</td><td><b>" + e.culto.replace(/_/g, ' ') + "</b></td><td>" + e.descripcion + "</td></tr>";
             });
             document.getElementById("tablaEventos").innerHTML = html;
         }
-    } catch (err) { console.error("Error al cargar eventos:", err); }
+    } catch (err) { console.error(err); }
 }
 
 async function guardarEvento(e) {
@@ -143,7 +139,7 @@ async function guardarEvento(e) {
     try {
         const res = await fetch(API_URL + "/eventos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(datos) });
         if (res.ok) { alert("¡Evento Publicado!"); document.getElementById("formEvento").reset(); cargarEventos(); }
-    } catch (err) { alert("Error al guardar el evento."); }
+    } catch (err) { alert("Error al publicar evento."); }
 }
 
 // --- MÓDULO: PRIVILEGIOS ---
@@ -154,12 +150,11 @@ async function cargarSugerenciasPrivilegios() {
             const sugerencias = await res.json();
             let html = "";
             sugerencias.forEach(s => {
-                const fechaTexto = s.fecha || 'Nunca';
-                html += "<option value='" + s.miembroId + "'>" + s.nombreCompleto + " (Último: " + fechaTexto + ")</option>";
+                html += "<option value='" + s.miembroId + "'>" + s.nombreCompleto + " (Último: " + (s.fecha || 'Nunca') + ")</option>";
             });
             document.getElementById("p_miembro").innerHTML = html;
         }
-    } catch (err) { console.error("Error al cargar privilegios:", err); }
+    } catch (err) { console.error(err); }
 }
 
 async function guardarPrivilegio(e) {
@@ -179,17 +174,11 @@ async function cargarFinanzas() {
             const lista = await res.json();
             let html = "";
             lista.forEach(f => {
-                html += "<tr>" +
-                    "<td>" + f.fecha + "</td>" +
-                    "<td><span class='badge badge-" + f.tipo.toLowerCase() + "'>" + f.tipo + "</span></td>" +
-                    "<td>" + f.categoria + "</td>" +
-                    "<td>" + f.sociedad + "</td>" +
-                    "<td><b>$" + f.monto + "</b></td>" +
-                    "</tr>";
+                html += "<tr><td>" + f.fecha + "</td><td><span class='badge'>" + f.tipo + "</span></td><td>" + f.categoria + "</td><td>" + f.sociedad + "</td><td><b>$" + f.monto + "</b></td></tr>";
             });
             document.getElementById("tablaFinanzas").innerHTML = html;
         }
-    } catch (err) { console.error("Error al cargar finanzas:", err); }
+    } catch (err) { console.error(err); }
 }
 
 async function guardarFinanza(e) {
@@ -228,20 +217,21 @@ async function guardarSantaCena() {
     for (let check of filas) {
         const datos = {
             miembroId: parseInt(check.getAttribute("data-id")),
-            fechaDomingo: fecha, asistio:
-                check.checked
+            fechaDomingo: fecha,
+            asistio: check.checked
         };
 
         try {
             await fetch(API_URL + "/santacena", {
-                method: "POST", headers: {
-                    "Content-Type":
-                        "application/json"
-                }, body: JSON.stringify(datos)
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datos)
             });
             guardados++;
-        }
-        catch (err) { console.error("Error guardando fila de santa cena:", err); }
+        } catch (err) { console.error("Error guardando fila de santa cena:", err); }
     }
-    if (guardados > 0) { alert("¡Registro mensual de Santa Cena guardado con éxito!"); }
+
+    if (guardados > 0) {
+        alert("¡Registro mensual de Santa Cena guardado con éxito en la nube!");
+    }
 }
